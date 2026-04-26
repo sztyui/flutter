@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:f_app/styled_text.dart';
 import 'dart:math';
 
+var random = Random();
+
 class DiceRoller extends StatefulWidget {
   const DiceRoller({super.key});
 
@@ -13,13 +15,13 @@ class DiceRoller extends StatefulWidget {
 
 class _DiceRollerState extends State<DiceRoller> {
 
-  var activeImage = 'assets/images/dice-1.jpeg';
+  var currentDiceRoll = 2;
+
 
   void choosePicture() {
+    
     setState(() {
-      final random = Random();
-      int diceRoll = random.nextInt(6) + 1;
-      activeImage = 'assets/images/dice-$diceRoll.jpeg';
+      currentDiceRoll = random.nextInt(6) + 1;
     });
   }
 
@@ -29,7 +31,7 @@ class _DiceRollerState extends State<DiceRoller> {
                   children: [
                     Center(child: StyledText("Az első szerelem app a mösszömnek ❤️")),
                     const SizedBox(height: 20),
-                    Center(child: Image.asset(activeImage, width: 250)),
+                    Center(child: Image.asset('assets/images/dice-$currentDiceRoll.jpeg', width: 250)),
                     const SizedBox(height: 100),
                     Center(
                       child: TextButton(
