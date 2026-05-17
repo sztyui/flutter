@@ -31,10 +31,12 @@ class ResultsScreen extends StatelessWidget {
   }
 
   String get successfulAnswers {
-    return chosenAnswers.asMap().entries
-      .where((entry) => questions[entry.key].answers[0] == entry.value)
-      .length
-      .toString();
+    return chosenAnswers
+        .asMap()
+        .entries
+        .where((entry) => questions[entry.key].answers[0] == entry.value)
+        .length
+        .toString();
   }
 
   @override
@@ -53,6 +55,17 @@ class ResultsScreen extends StatelessWidget {
                 color: const Color.fromARGB(255, 201, 153, 251),
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
+              ),
+            ),
+            Visibility(
+              visible: successfulAnswers == questions.length.toString(),
+              child: Text(
+                textAlign: TextAlign.center,
+                'Most már akár le is szophatod magad... 🍆',
+                style: GoogleFonts.lato(
+                  color: const Color.fromARGB(255, 201, 153, 251),
+                  fontSize: 16,
+                ),
               ),
             ),
             const SizedBox(height: 30),
