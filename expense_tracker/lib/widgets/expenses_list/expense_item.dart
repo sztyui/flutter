@@ -51,7 +51,7 @@ class ExpenseItem extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      '\$${expense.amount.toStringAsFixed(2)}',
+                      '${expense.amount.toStringAsFixed(0)} Ft',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,

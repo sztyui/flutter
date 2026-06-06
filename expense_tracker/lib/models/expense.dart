@@ -31,7 +31,7 @@ class Expense {
   String get formattedDate => formatter.format(date);
 
   String represent() {
-    return 'Expense(title:"$title", amount: ${amount.toString()}, category: $category, date: "${formattedDate}")';
+    return 'Expense(title:"$title", amount: ${amount.toString()}, category: $category, date: "$formattedDate")';
   }
 }
 
