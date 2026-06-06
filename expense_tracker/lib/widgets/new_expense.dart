@@ -174,7 +174,7 @@ class _NewExpenseState extends State<NewExpense> {
                   ],
                 ),
               ),
-              ElevatedButton(
+              OutlinedButton(
                 onPressed: () => Navigator.pop(context),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
