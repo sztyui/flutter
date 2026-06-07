@@ -41,7 +41,7 @@ List<Category> availableCategories = [
   ),
   Category(
     id: 'c8',
-    title: 'Asian',
+    title: 'Asian 😡',
     color: Colors.lightGreen,
   ),
   Category(

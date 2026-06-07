@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meals/models/meal.dart';
-import 'package:meals/screens/meal.dart';
+import 'package:meals/screens/meal_item.dart';
 
 class MealsScreen extends StatelessWidget {
   const MealsScreen({super.key, required this.title, required this.meals});
@@ -10,13 +10,10 @@ class MealsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     void moveToMeal(Meal meal) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (ctx) => MealPage(meal: meal)
-        )
-      );
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (ctx) => MealPage(meal: meal)));
     }
 
     Widget body = Center(
@@ -46,15 +43,22 @@ class MealsScreen extends StatelessWidget {
           scrollDirection: Axis.vertical,
           itemBuilder: (context, index) {
             return GestureDetector(
-              onTap: ()=>moveToMeal(meals[index]),
+              onTap: () => moveToMeal(meals[index]),
               child: Card(
                 margin: const EdgeInsets.all(10),
                 child: ListTile(
                   leading: SizedBox(
                     width: 100,
-                    child: Image.network(meals[index].imageUrl)
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        meals[index].imageUrl,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                  title: Text(meals[index].title)),
+                  title: Text(meals[index].title),
+                ),
               ),
             );
           },
