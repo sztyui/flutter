@@ -82,7 +82,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
             ],
           ),
         ),
-        
+
         // Animated GridView Section
         Expanded(
           child: AnimatedBuilder(
@@ -105,12 +105,18 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                   )
                   .toList(),
             ),
-            builder: (context, child) => Transform.translate(
-              offset: Offset(0, 100 * (1 - _animationController.value)),
-              child: Opacity(
-                opacity: _animationController.value,
-                child: child,
-              ),
+            builder: (context, child) => SlideTransition(
+              position:
+                  Tween(
+                    begin: const Offset(0, 0.3),
+                    end: const Offset(0, 0),
+                  ).animate(
+                    CurvedAnimation(
+                      parent: _animationController,
+                      curve: Curves.easeInOut,
+                    ),
+                  ),
+              child: child,
             ),
           ),
         ),

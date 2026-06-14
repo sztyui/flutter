@@ -12,11 +12,11 @@ class MealItemScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    
+
     // Watch the favorites provider to react to changes
     final favoriteMeals = ref.watch(favouriteMealsProvider);
     final isFavorite = favoriteMeals.contains(meal);
-    
+
     final ingredients = meal.ingredients.map((str) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
@@ -99,11 +99,21 @@ class MealItemScreen extends ConsumerWidget {
           IconButton(
             onPressed: () {
               // Toggle favorite status
-              ref.read(favouriteMealsProvider.notifier).toggleMealFavouriteStatus(meal);
+              ref
+                  .read(favouriteMealsProvider.notifier)
+                  .toggleMealFavouriteStatus(meal);
             },
-            icon: Icon(
-              isFavorite ? Icons.favorite_outlined : Icons.favorite_outline,
-              color: isFavorite ? Colors.red : colorScheme.onSurface,
+            icon: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 800),
+              transitionBuilder: (child, animation) => RotationTransition(
+                turns: Tween<double>(begin: 0.1, end: 1.0).animate(animation),
+                child: child,
+              ),
+              child: Icon(
+                isFavorite ? Icons.favorite_outlined : Icons.favorite_outline,
+                color: isFavorite ? Colors.red : colorScheme.onSurface,
+                key: ValueKey(isFavorite),
+              ),
             ),
             tooltip: isFavorite ? 'Remove from favorites' : 'Add to favorites',
           ),
@@ -115,7 +125,7 @@ class MealItemScreen extends ConsumerWidget {
           children: [
             // Hero Image Section
             _buildHeroImage(context),
-            
+
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -123,23 +133,23 @@ class MealItemScreen extends ConsumerWidget {
                 children: [
                   // Quick Info Cards
                   _buildQuickInfoCards(context),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   // Dietary Info
                   _buildSectionTitle(context, 'Dietary Information'),
                   const SizedBox(height: 12),
                   _buildDietaryTags(context),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   // Ingredients
                   _buildSectionTitle(context, 'Ingredients'),
                   const SizedBox(height: 12),
                   _buildIngredientsCard(context, ingredients),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   // Steps
                   _buildSectionTitle(context, 'Cooking Steps'),
                   const SizedBox(height: 12),
@@ -155,33 +165,34 @@ class MealItemScreen extends ConsumerWidget {
 
   Widget _buildHeroImage(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Stack(
       children: [
         Container(
           height: 250,
           width: double.infinity,
-          decoration: BoxDecoration(
-            color: colorScheme.surfaceContainerHighest,
-          ),
+          decoration: BoxDecoration(color: colorScheme.surfaceContainerHighest),
           child: ClipRRect(
             borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(24),
               bottomRight: Radius.circular(24),
             ),
-            child: Image.network(
-              meal.imageUrl,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: colorScheme.surfaceContainerHighest,
-                  child: Icon(
-                    Icons.restaurant,
-                    size: 64,
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                );
-              },
+            child: Hero(
+              tag: meal.id,
+              child: Image.network(
+                meal.imageUrl,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: colorScheme.surfaceContainerHighest,
+                    child: Icon(
+                      Icons.restaurant,
+                      size: 64,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -197,11 +208,7 @@ class MealItemScreen extends ConsumerWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  Icons.fitness_center,
-                  color: Colors.white,
-                  size: 20,
-                ),
+                Icon(Icons.fitness_center, color: Colors.white, size: 20),
                 const SizedBox(width: 6),
                 Text(
                   meal.complexity.name.toUpperCase(),
@@ -221,7 +228,7 @@ class MealItemScreen extends ConsumerWidget {
 
   Widget _buildQuickInfoCards(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Row(
       children: [
         Expanded(
@@ -229,8 +236,9 @@ class MealItemScreen extends ConsumerWidget {
             context,
             icon: Icons.attach_money,
             label: 'Affordability',
-            value: meal.affordability.name[0].toUpperCase() + 
-                   meal.affordability.name.substring(1),
+            value:
+                meal.affordability.name[0].toUpperCase() +
+                meal.affordability.name.substring(1),
             color: _getAffordabilityColor(colorScheme),
           ),
         ),
@@ -256,7 +264,7 @@ class MealItemScreen extends ConsumerWidget {
     required Color color,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -304,7 +312,7 @@ class MealItemScreen extends ConsumerWidget {
 
   Widget _buildSectionTitle(BuildContext context, String title) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Text(
       title,
       style: TextStyle(
@@ -327,11 +335,7 @@ class MealItemScreen extends ConsumerWidget {
         isCompliant: meal.isVegetarian,
         icon: Icons.eco,
       ),
-      _DietaryTag(
-        label: 'Vegan',
-        isCompliant: meal.isVegan,
-        icon: Icons.spa,
-      ),
+      _DietaryTag(label: 'Vegan', isCompliant: meal.isVegan, icon: Icons.spa),
       _DietaryTag(
         label: 'Lactose Free',
         isCompliant: meal.isLactoseFree,
@@ -382,7 +386,7 @@ class MealItemScreen extends ConsumerWidget {
 
   Widget _buildIngredientsCard(BuildContext context, List<Widget> ingredients) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),

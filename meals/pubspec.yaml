@@ -1,5 +1,5 @@
 name: meals
-description: "A new Flutter project."
+description: "My meals app"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -37,6 +37,12 @@ dependencies:
   google_fonts: ^8.1.0
   transparent_image: ^2.0.1
   flutter_riverpod: ^3.3.2
+  flutter_launcher_icons: ^0.13.1 
+
+flutter_launcher_icons:
+  android: true # can specify file name here e.g. "ic_launcher"
+  ios: true # can specify file name here e.g. "My-Launcher-Icon"
+  image_path: "assets/images/icon.png"
 
 dev_dependencies:
   flutter_test:

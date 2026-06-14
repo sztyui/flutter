@@ -133,23 +133,26 @@ class MealsScreen extends ConsumerWidget {
                           topLeft: Radius.circular(16),
                           topRight: Radius.circular(16),
                         ),
-                        child: FadeInImage(
-                          placeholder: MemoryImage(kTransparentImage),
-                          image: NetworkImage(meal.imageUrl),
-                          fit: BoxFit.cover,
-                          height: 180,
-                          width: double.infinity,
-                          imageErrorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              height: 180,
-                              color: colorScheme.surfaceContainerHighest,
-                              child: Icon(
-                                Icons.restaurant,
-                                size: 48,
-                                color: colorScheme.onSurfaceVariant,
-                              ),
-                            );
-                          },
+                        child: Hero(
+                          tag: meal.id,
+                          child: FadeInImage(
+                            placeholder: MemoryImage(kTransparentImage),
+                            image: NetworkImage(meal.imageUrl),
+                            fit: BoxFit.cover,
+                            height: 180,
+                            width: double.infinity,
+                            imageErrorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                height: 180,
+                                color: colorScheme.surfaceContainerHighest,
+                                child: Icon(
+                                  Icons.restaurant,
+                                  size: 48,
+                                  color: colorScheme.onSurfaceVariant,
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                       // Duration Badge
