@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:meals/models/favourite_meals.dart';
 import 'package:meals/models/meal.dart';
 
-class MealPage extends StatelessWidget {
-  const MealPage({super.key, required this.meal});
+
+class MealItemScreen extends StatelessWidget {
+  const MealItemScreen({super.key, required this.meal});
 
   final Meal meal;
 
@@ -10,6 +12,7 @@ class MealPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ingridients = meal.ingredients.map((str) {
       return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -23,7 +26,9 @@ class MealPage extends StatelessWidget {
           const SizedBox(width: 5),
           Text(
             str,
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
         ],
       );
@@ -62,13 +67,34 @@ class MealPage extends StatelessWidget {
         .values
         .toList();
 
-    String getAffordabilty() {
+    Row getAffordabilty() {
       if (meal.affordability == Affordability.affordable) {
-        return '\$';
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.monetization_on, color: Colors.white,),
+          ],
+        );
       } else if (meal.affordability == Affordability.pricey) {
-        return '\$\$';
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.monetization_on, color: Colors.white,),
+            SizedBox(width: 2),
+            Icon(Icons.monetization_on, color: Colors.white,),
+          ],
+        );
       }
-      return '\$\$\$';
+      return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.monetization_on, color: Colors.white,),
+            SizedBox(width: 2),
+            Icon(Icons.monetization_on, color: Colors.white,),
+            SizedBox(width: 2),
+            Icon(Icons.monetization_on, color: Colors.white,),
+          ],
+        );
     }
 
     String isGlutenFree() {
@@ -98,11 +124,11 @@ class MealPage extends StatelessWidget {
 
     String getComplexity() {
       if (meal.complexity == Complexity.simple) {
-        return '💪🏻 (simple)';
+        return '💪🏻 (${meal.complexity.name})';
       } else if (meal.complexity == Complexity.challenging) {
-        return '💪🏻💪🏻 (challenging)';
+        return '💪🏻💪🏻 (${meal.complexity.name})';
       }
-      return '💪🏻💪🏻😓 (hard)';
+      return '💪🏻💪🏻😓 (${meal.complexity.name})';
     }
 
     final br = BorderRadius.only(
@@ -112,8 +138,25 @@ class MealPage extends StatelessWidget {
       bottomRight: Radius.circular(12),
     );
 
+    Color favIconColor = Colors.white;
+    if(FavouriteMeals().exists(meal)) {
+      favIconColor = Colors.amberAccent;
+    }
+
     return Scaffold(
-      appBar: AppBar(title: Text(meal.title)),
+      appBar: AppBar(
+        title: Text(meal.title),
+        actions: [
+          IconButton(onPressed: () {
+            if(!FavouriteMeals().exists(meal)){
+              FavouriteMeals().add(meal);
+            } else {
+              FavouriteMeals().delete(meal);
+            }
+            
+          }, icon: Icon(Icons.star, color: favIconColor,))
+        ]
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(12),
         child: Column(
@@ -133,14 +176,7 @@ class MealPage extends StatelessWidget {
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
-                  Text(
-                    getAffordabilty(),
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
+                  getAffordabilty(),
                 ],
               ),
             ),
@@ -216,6 +252,7 @@ class MealPage extends StatelessWidget {
                 'Ingredients:',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
+                  fontWeight: FontWeight.bold
                 ),
               ),
             ),
