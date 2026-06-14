@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:meals/models/favourite_meals.dart';
 import 'package:meals/screens/tabs.dart';
-import 'package:meals/screens/categories.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final theme = ThemeData(
   useMaterial3: true,
   colorScheme: ColorScheme.fromSeed(
     brightness: Brightness.dark,
-    seedColor: const Color.fromARGB(255, 131, 57, 0)),
-    textTheme: GoogleFonts.latoTextTheme()
+    seedColor: const Color.fromARGB(255, 131, 57, 0),
+  ),
+  textTheme: GoogleFonts.latoTextTheme(),
 );
-
 
 var favouriteMealsSingleton = FavouriteMeals();
 
 void main() {
-  runApp(const App());
+  runApp(const ProviderScope(child: App()));
 }
 
 class App extends StatelessWidget {
@@ -27,9 +27,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       theme: theme,
       initialRoute: '/',
-      routes: {
-        '/': (context) => const TabScreen(),
-      }
+      routes: {'/': (context) => const TabScreen()},
     );
   }
 }
